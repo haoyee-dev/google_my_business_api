@@ -1,12 +1,12 @@
 {
   "name": "google-mybusiness",
   "version": "1.0.0",
-  "description": "",
+  "description": "Google My Business API v3",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Hao Yee Chan",
   "license": "ISC",
   "dependencies": {
     "googleapis": "^20.1.0",
