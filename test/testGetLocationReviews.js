@@ -1,6 +1,6 @@
 let GoogleMyBusiness = require("../index");
 
-const locationId = "";
+const locationId = "<LOCATION_ID>";
 const TOKENS_FILE = "./tokens.json";
 const MANAGER_FILE = "./managers.json";
 const SECRET_FILE = "./client_secret.json";
