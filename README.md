@@ -1,7 +1,7 @@
 Google My Business API
 ======================
 
-Node.js client library for using Google My Business API v3. Support for authentication, token refresh. Tokens are saved to a local file.
+Node.js client library for using Google My Business API v3. Support for authentication, token refresh. Tokens are saved to a local file. This is meant for users who want a quick way to extract most commonly required business data for analysis. For full usage of Google My Business API, please refer to the full [API documentation](https://developers.google.com/my-business/)
 
 Library Maintenance
 -------------------
@@ -56,6 +56,7 @@ APIs supported
 - getAllLocations(callback): get all locations
 - getLocationById(locationId, callback): get a single location by location id
 - getLocationReviews(locationId, callback): list reviews for a given location id
+- getInsightsbyLocationId(locationId, numberOfPeriods, periodUnit, callback), list location insights for a given location id for the past number of periods as defined by the [periodUnit](https://momentjs.com/docs/#/manipulating/add)
 
 Examples
 --------
@@ -103,6 +104,19 @@ gmb.getLocationReviews(locationId, function (err, v) {
         console.log(`Error: ${JSON.stringify(err)}`);
     } else {
         console.log(JSON.stringify(v, 4));
+    }
+});
+```
+
+### Get Location Insights
+Get location insights for the past week
+``` javascript
+let locationId = "<LOCATION_ID>";
+gmb.getInsightsByLocation(locationId, 1, "week", function (err, v) {
+    if (err) {
+        console.log(`Error: ${JSON.stringify(err)}`);
+    } else {
+        console.log(JSON.stringify(v));
     }
 });
 ```

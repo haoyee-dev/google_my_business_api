@@ -8,6 +8,7 @@ const VERSION = "v3";
 const BASE_URL = `${API_URL}/${VERSION}`;
 const GET_ACCOUNTS_URL = `${BASE_URL}/accounts`;
 
+const moment = require('moment');
 const winston = require('winston');
 const fs = require("fs");
 let google = require("googleapis");
@@ -249,7 +250,7 @@ class GoogleMyBusiness {
                 'bearer': self.tokens.access_token
             }
         }, function (error, response, body) {
-            
+
             let googleResponse = JSON.parse(body);
             if (googleResponse.error) {
                 return cb({
@@ -257,7 +258,7 @@ class GoogleMyBusiness {
                 }, null);
             }
 
-           return cb(null, googleResponse);
+            return cb(null, googleResponse);
         })
 
     }
@@ -281,7 +282,7 @@ class GoogleMyBusiness {
                 'bearer': self.tokens.access_token
             }
         }, function (error, response, body) {
-            
+
             let googleResponse = JSON.parse(body);
             if (googleResponse.error) {
                 return cb({
@@ -289,9 +290,63 @@ class GoogleMyBusiness {
                 }, null);
             }
 
-           return cb(null, googleResponse);
+            return cb(null, googleResponse);
         })
 
+    }
+
+    getInsightsByLocation(locationId, numberOfPeriods, periodUnit, cb) {
+        let self = this;
+
+        if (!self.hasToken()) {
+            return;
+        }
+        if (!self.hasManagerId()) {
+            return cb({
+                error: "No account_name"
+            }, null);
+        }
+
+        let managers = require(self.managerFile);
+        let manager_id = managers[0]['name'].split('/')[1];
+
+        let requestBody = {
+            url: `${BASE_URL}/accounts/${manager_id}/locations:reportInsights`,
+            "auth": {
+                "bearer": self.tokens.access_token
+            },
+            json: {
+                "locationNames": [`accounts/${manager_id}/locations/${locationId}`],
+                "basicRequest": {
+                    "metricRequests": [
+                        {
+                            "metric": "ALL",
+                            "options": "AGGREGATED_DAILY"
+                        }
+                    ],
+                    "timeRange": {
+                        "startTime": moment()
+                            .subtract(1, 'week')
+                            .toISOString(),
+                        "endTime": moment()
+                            .toISOString()
+                    }
+                }
+            }
+        }
+
+        request.post( requestBody, function (error, response, body) {
+            
+            let googleResponse = body;
+            
+            if (googleResponse.error) {
+                return cb({
+                    error: googleResponse.error
+                }, null);
+            }
+
+            return cb(null, googleResponse);
+        });
     }
 }
 
