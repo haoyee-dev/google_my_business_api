@@ -326,7 +326,7 @@ class GoogleMyBusiness {
                     ],
                     "timeRange": {
                         "startTime": moment()
-                            .subtract(1, 'week')
+                            .subtract(numberOfPeriods, periodUnit)
                             .toISOString(),
                         "endTime": moment()
                             .toISOString()
